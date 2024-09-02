@@ -36,7 +36,7 @@ Este projeto é um exemplo básico de um CRUD (Create, Read, Update, Delete) uti
 Para rodar a aplicação, utilize o comando:
 
 ```bash
-uvicorn main:app --reload
+poetry run uvicorn main:app --reload
 ```
 
 Isso iniciará o servidor em modo de recarga automática em `http://127.0.0.1:8000`.
