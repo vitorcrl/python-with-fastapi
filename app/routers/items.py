@@ -3,6 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from .. import crud, models, schemas
 from ..database import SessionLocal, engine
+from app.logger import logger
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -18,15 +19,18 @@ def get_db():
 
 @router.post("/items/", response_model=schemas.Item)
 def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    logger.info("Rota para criação de um novo item")
     return crud.create_item(db=db, item=item)
 
 @router.get("/items/", response_model=List[schemas.Item])
 def read_items(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    logger.info("Rota para leitura de todos os itens")
     items = crud.get_items(db, skip=skip, limit=limit)
     return items
 
 @router.get("/items/{item_id}", response_model=schemas.Item)
 def read_item(item_id: int, db: Session = Depends(get_db)):
+    logger.info("Rota para leitura de um item específico")
     db_item = crud.get_item(db, item_id=item_id)
     if db_item is None:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -34,6 +38,7 @@ def read_item(item_id: int, db: Session = Depends(get_db)):
 
 @router.put("/items/{item_id}", response_model=schemas.Item)
 def update_item(item_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    logger.info("Rota para atualização de um item")
     db_item = crud.update_item(db, item_id=item_id, updated_item=item)
     if db_item is None:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -41,6 +46,7 @@ def update_item(item_id: int, item: schemas.ItemCreate, db: Session = Depends(ge
 
 @router.delete("/items/{item_id}")
 def delete_item(item_id: int, db: Session = Depends(get_db)):
+    logger.info("Rota para exclusão de um item")
     db_item = crud.delete_item(db, item_id=item_id)
     if db_item is None:
         raise HTTPException(status_code=404, detail="Item not found")
