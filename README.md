@@ -67,7 +67,31 @@ curl -X 'POST' \
   "tax": 1.5
 }'
 ```
+### Gerenciando Migrações com Alembic
+1. Criando uma Nova Migração
+Após alterar os modelos em app/models.py, você precisa criar uma nova migração para refletir essas mudanças no banco de dados.
 
+No diretório raiz do projeto, execute:
+
+```bash
+alembic revision --autogenerate -m "Descrição da migração"
+```
+Isso gerará um novo arquivo de migração no diretório alembic/versions/.
+2. Aplicando Migrações
+Para aplicar as migrações ao banco de dados, execute:
+
+```bash
+alembic upgrade head
+```
+Este comando aplicará todas as migrações pendentes e atualizará o esquema do banco de dados.
+
+3. Revertendo Migrações
+Se precisar reverter uma migração, você pode usar:
+
+```bash
+alembic downgrade -1
+```
+Isso reverterá a última migração aplicada. Você pode especificar um número de revisão específico ou usar base para voltar ao estado inicial.
 ### Exemplo de Leitura de Todos os Itens
 
 ```bash
